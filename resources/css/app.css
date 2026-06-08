@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-ice-blue text-slate-800 antialiased;
+        /* Menggunakan font Plus Jakarta Sans secara global */
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Memastikan link tidak memiliki underline default kecuali di-hover */
+    a {
+        @apply transition-all duration-300 ease-in-out;
+    }
+}
+
+@layer components {
+    /* Gradasi Biru Sejuk mirip gambar Hero Section */
+    .bg-hero-sky {
+        @apply bg-gradient-to-br from-[#2D5CC5] via-[#3B82F6] to-[#1E3A8A];
+    }
+
+    /* Card Putih dengan border biru sangat tipis */
+    .card-sky {
+        @apply bg-white border border-sky-100 rounded-[2.5rem] shadow-sm hover:shadow-md transition-all duration-300;
+    }
+
+    /* Tombol Utama - Sky Blue */
+    .btn-primary-sky {
+        @apply bg-sky-light text-ocean-deep font-black px-6 py-3 rounded-2xl 
+               shadow-lg shadow-sky-200 hover:bg-blue-400 hover:-translate-y-1 active:scale-95 transition-all;
+    }
+
+    /* Tombol Kontras - Navy */
+    .btn-navy {
+        @apply bg-ocean-deep text-white font-bold px-6 py-3 rounded-2xl 
+               hover:bg-slate-900 shadow-xl shadow-blue-900/10 active:scale-95 transition-all;
+    }
+
+    /* Badge Status Mint Breeze */
+    .badge-mint {
+        @apply bg-mint-breeze text-teal-700 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider;
+    }
+}
+
+@layer utilities {
+    /* Animasi halus untuk elemen yang muncul */
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* Glassmorphism effect */
+    .glass {
+        @apply bg-white/70 backdrop-blur-md border border-white/20;
+    }
+}
+
+/* Custom Scrollbar (Versi CSS murni untuk mendukung browser selain Chrome) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #7DD3FC #F0F9FF;
+}
+
+/* Menghilangkan input arrow pada type="number" agar lebih bersih */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
