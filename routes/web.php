@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
-        $role = strtolower($user->ROLE ?? $user->role ?? 'user');
+        $role = strtolower($user->role ?? 'user');
         return $role === 'admin' ? redirect()->route('admin.dashboard') : redirect()->route('user.dashboard');
     }
     return view('welcome');
@@ -67,9 +67,14 @@ Route::middleware('auth')->group(function () {
     // Menampilkan halaman form OTP
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
     
+    // Verifikasi Email via Link (safety route - sistem ini pakai OTP custom)
+    Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
     // Penangan Submit Verifikasi Angka OTP ke OtpController
     Route::post('verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
-    Route::get('verify-otp', function() { return redirect()->route('verification.notice'); }); 
+    Route::get('verify-otp', function() { return redirect()->route('verification.notice'); });
     
     // Penangan Tombol Minta Kirim Ulang OTP Baru
     Route::post('email/verification-notification', [OtpController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
@@ -133,6 +138,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 */
 Route::middleware(['auth'])->get('/redirect-dashboard', function () {
     $user = Auth::user();
-    $role = strtolower($user->ROLE ?? $user->role ?? 'user');
+    $role = strtolower($user->role ?? 'user');
     return $role === 'admin' ? redirect()->route('admin.dashboard') : redirect()->route('user.dashboard');
 })->name('dashboard');

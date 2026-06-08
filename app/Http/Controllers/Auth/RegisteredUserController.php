@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+// Event Registered dihapus - sistem pakai OTP custom, bukan email verification bawaan Laravel
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,10 +59,8 @@ class RegisteredUserController extends Controller
 
         Mail::to($request->email)->send(new SendOtpMail($otpCode));
 
-        event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('verification.notice');
     }
 }
