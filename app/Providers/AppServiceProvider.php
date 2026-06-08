@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Penting untuk Oracle agar index email tidak terlalu panjang
+        // Untuk kompatibilitas MySQL versi lama (< 5.7.7) agar index string tidak terlalu panjang
         Schema::defaultStringLength(191);
     }
 }

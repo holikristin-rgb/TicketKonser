@@ -6,14 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Concert extends Model
 {
-    protected $table = 'CONCERTS'; // Gunakan huruf kapital untuk Oracle agar lebih aman
+    protected $table = 'concerts';
     protected $primaryKey = 'id';
-    
-    /**
-     * Nonaktifkan timestamps otomatis karena Oracle sering bermasalah 
-     * dengan format default UPDATED_AT milik Laravel (Error ORA-00904).
-     */
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nama_konser',
@@ -22,7 +17,8 @@ class Concert extends Model
         'tanggal_konser',
         'lokasi',
         'stok_tiket',
-        'poster', // Pastikan poster ada agar gambar artis bisa muncul
+        'genre',
+        'poster',
     ];
 
     // Relasi ke Booking

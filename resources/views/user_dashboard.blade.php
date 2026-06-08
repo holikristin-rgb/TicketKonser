@@ -18,8 +18,7 @@
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-3">
                     @php 
-                        // Toleransi pembacaan nama user dari database Oracle
-                        $userName = $user->NAME ?? $user->name ?? 'User'; 
+                        $userName = $user->name ?? 'User'; 
                     @endphp
                     <p class="text-sm font-medium text-slate-600">Halo, <span class="font-bold text-slate-900">{{ $userName }}</span></p>
                     <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
@@ -54,16 +53,15 @@
             <p class="text-blue-100 text-sm opacity-90">Amankan tiket konser musisi favoritmu sebelum kehabisan!</p>
         </div>
 
-        {{-- SEKSI 1: DAFTAR TIKET TERSEDIA --}}
         <h3 class="text-sm font-black mb-6 uppercase tracking-widest text-slate-400 italic">Tiket Tersedia</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             @foreach($concerts as $ticket)
                 @php
-                    $ticketId = $ticket->ID ?? $ticket->id;
-                    $namaKonser = $ticket->NAMA_KONSER ?? $ticket->nama_konser;
-                    $hargaKonser = $ticket->HARGA ?? $ticket->harga;
-                    $posterKonser = $ticket->POSTER ?? $ticket->poster;
-                    $lokasiKonser = $ticket->LOKASI ?? $ticket->lokasi ?? 'Stadion';
+                    $ticketId    = $ticket->id;
+                    $namaKonser  = $ticket->nama_konser;
+                    $hargaKonser = $ticket->harga;
+                    $posterKonser = $ticket->poster;
+                    $lokasiKonser = $ticket->lokasi ?? 'Stadion';
                 @endphp
                 <div class="bg-white rounded-[35px] shadow-sm overflow-hidden border border-slate-100 hover:shadow-md transition duration-300">
                     <img src="{{ asset('storage/' . $posterKonser) }}" class="h-52 w-full object-cover" alt="Poster {{ $namaKonser }}">
@@ -95,22 +93,13 @@
                     <tbody class="divide-y divide-slate-50">
                         @forelse($bookings as $booking)
                             @php
-                                $bookingId = $booking->ID ?? $booking->id;
-                                $totalHarga = $booking->TOTAL_HARGA ?? $booking->total_harga;
-                                $statusBooking = strtoupper($booking->STATUS ?? $booking->status ?? 'PENDING');
-                                $jumlahTiket = $booking->JUMLAH_TIKET ?? $booking->jumlah_tiket ?? 1;
+                                $bookingId        = $booking->id;
+                                $totalHarga       = $booking->total_harga;
+                                $statusBooking    = strtoupper($booking->status ?? 'PENDING');
+                                $jumlahTiket      = $booking->jumlah_tiket ?? 1;
                                 
-                                // Membaca data langsung dari properti objek hasil LEFT JOIN database Oracle
-                                $namaKonserBooking = $booking->NAMA_KONSER ?? $booking->nama_konser ?? null;
-
-                                // Pengecekan fallback bawaan Anda agar nama penyanyi keluar stabil
-                                if (!$namaKonserBooking) {
-                                    if (isset($booking->concert)) {
-                                        $namaKonserBooking = $booking->concert->NAMA_KONSER ?? $booking->concert->nama_konser ?? 'Event Konser';
-                                    } else {
-                                        $namaKonserBooking = 'Event Konser (Telah Dihapus Admin)';
-                                    }
-                                }
+                                // Baca nama konser dari hasil LEFT JOIN
+                                $namaKonserBooking = $booking->nama_konser ?? 'Event Konser (Telah Dihapus Admin)';
                             @endphp
                             <tr>
                                 <td class="py-6">
@@ -133,7 +122,7 @@
                                             {{ $statusBooking == 'SUCCESS' || $statusBooking == 'SUKSES' ? 'SUKSES' : ($statusBooking == 'REJECTED' || $statusBooking == 'DITOLAK' ? 'DITOLAK' : $statusBooking) }}
                                         </span>
 
-                                        {{-- PERBAIKAN UTAMA: Mendukung pembacaan status 'SUKSES' dari database Oracle --}}
+                                        {{-- Badge Status --}}
                                         @if($statusBooking == 'SUCCESS' || $statusBooking == 'SUKSES')
                                             <a href="{{ route('ticket.download', $bookingId) }}" class="px-5 py-2.5 bg-slate-900 text-white text-[10px] font-black tracking-widest rounded-xl hover:bg-blue-600 transition-all shadow-md active:scale-95 transform">
                                                 LIHAT TIKET

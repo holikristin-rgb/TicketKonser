@@ -18,8 +18,8 @@ return new class extends Migration
                 
                 $table->integer('jumlah_tiket');
                 $table->decimal('total_harga', 15, 2);
-                $table->string('status')->default('PENDING'); // PENDING, SUCCESS, REJECTED
-                $table->string('bukti_pembayaran')->nullable();
+                $table->string('status')->default('PENDING'); // PENDING, SUKSES, DITOLAK
+                $table->string('bukti_transfer')->nullable();
                 $table->timestamps();
             });
         }

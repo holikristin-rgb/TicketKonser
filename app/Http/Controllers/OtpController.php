@@ -17,16 +17,16 @@ class OtpController extends Controller
             'otp' => 'required|numeric', 
         ]);
 
-        $user = Auth::user();
-        $userId = $user->id ?? $user->ID;
+        $user   = Auth::user();
+        $userId = $user->id;
 
-        $otpRecord = DB::table('USER_OTPS')
-            ->where('USER_ID', $userId)
-            ->orderBy('ID', 'desc')
+        $otpRecord = DB::table('user_otps')
+            ->where('email', $user->email)
+            ->orderBy('id', 'desc')
             ->first();
 
-        if ($otpRecord && $otpRecord->code == $request->otp) {
-            DB::table('USER_OTPS')->where('USER_ID', $userId)->delete();
+        if ($otpRecord && $otpRecord->otp == $request->otp) {
+            DB::table('user_otps')->where('email', $user->email)->delete();
 
             return redirect()->route('user.dashboard')->with('success', 'Email berhasil diverifikasi!');
         }
@@ -36,21 +36,20 @@ class OtpController extends Controller
 
     public function resend()
     {
-        $user = Auth::user();
-        $userId = $user->id ?? $user->ID;
+        $user    = Auth::user();
         $otpCode = rand(1000, 9999);
 
-        DB::table('USER_OTPS')->updateOrInsert(
-            ['USER_ID' => $userId],
+        DB::table('user_otps')->updateOrInsert(
+            ['email' => $user->email],
             [
-                'CODE' => $otpCode,
-                'EXPIRES_AT' => now()->addMinutes(10),
-                'CREATED_AT' => now(),
-                'UPDATED_AT' => now()
+                'otp'        => $otpCode,
+                'expires_at' => now()->addMinutes(10),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         );
 
-        Mail::to($user->email ?? $user->EMAIL)->send(new SendOtpMail($otpCode));
+        Mail::to($user->email)->send(new SendOtpMail($otpCode));
 
         return redirect()->back()->with('status', 'verification-link-sent')->with('success', 'Kode OTP baru berhasil dikirim!');
     }

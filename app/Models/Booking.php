@@ -9,27 +9,27 @@ class Booking extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-    protected $table = 'BOOKINGS';
-    protected $primaryKey = 'ID';
-    public $incrementing = true; 
+    protected $table = 'bookings';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    public $timestamps = true;
 
     protected $fillable = [
-        'USER_ID',
-        'CONCERT_ID',
-        'JUMLAH_TIKET',
-        'TOTAL_HARGA',
-        'STATUS',
-        'BUKTI_TRANSFER'
+        'user_id',
+        'concert_id',
+        'jumlah_tiket',
+        'total_harga',
+        'status',
+        'bukti_transfer',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'USER_ID', 'ID');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function concert()
     {
-        return $this->belongsTo(Concert::class, 'CONCERT_ID', 'ID');
+        return $this->belongsTo(Concert::class, 'concert_id', 'id');
     }
 }

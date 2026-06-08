@@ -12,8 +12,11 @@ return new class extends Migration
             Schema::create('concerts', function (Blueprint $table) {
                 $table->id();
                 $table->string('nama_konser');
+                $table->text('deskripsi')->nullable();
                 $table->decimal('harga', 15, 2);
-                $table->integer('stok_tiket');
+                $table->date('tanggal_konser')->nullable();
+                $table->string('lokasi')->nullable();
+                $table->integer('stok_tiket')->default(0);
                 $table->string('poster')->nullable();
                 $table->string('genre')->default('General');
                 $table->timestamps();
